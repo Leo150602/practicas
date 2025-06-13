@@ -1,14 +1,18 @@
 const nombre = document.getElementById("nombre"), 
 email = document.getElementById("email"), 
 numero = document.getElementById("numero"), 
-contraseña = document.getElementById("contraseña"), confirmacion = document.getElementById("confirmacion"), 
-registro = document.getElementById("btn_registro"),
+contraseña = document.getElementById("contraseña"), 
+confirmacion = document.getElementById("confirmacion"), 
+registro = document.getElementById("registro"),
 inicio = document.getElementById("btn_inicio")
 
 const usuario = document.getElementById("usuario"),
 contra =document.getElementById("contra"),
-inicio_s = document.getElementById("inicio_secion")
+inicio_s = document.getElementById("inicio_secion"),
+lista = document.getElementById("lista")
 
+
+let perfil
 let datos =[{nombre: 'kevin', email: 'kevingamboamosquera@gmail.com', numero: '3215851276', contraseña: 'cualquiercosa', confirmacion:'cualquiercosa' }]
 
 function verificacion(){
@@ -16,8 +20,13 @@ function verificacion(){
     let v1 = true
     if (nombre.value.trim() != ''){
 
+      
+        nombre.classList.remove("alerta")
+
+       
+
     }else{
-        v1=flase
+        v1=false
 
         nombre.value = ''
         nombre.setAttribute("placeholder", "nombre faltante")
@@ -26,8 +35,10 @@ function verificacion(){
 
     if (email.value.trim() != ''){
 
+        email.classList.remove("alerta")
+
     }else{
-        v1=flase
+        v1=false
 
         email.value =''
         email.setAttribute("placeholder", "email faltante")
@@ -36,8 +47,10 @@ function verificacion(){
 
     if (numero.value.trim() != ''){
 
+        numero.classList.remove("alerta")
+
     }else{
-        v1=flase
+        v1=false
         
         numero.value = ''
         numero.setAttribute("placeholder","numero faltante")
@@ -46,8 +59,10 @@ function verificacion(){
 
     if (contraseña.value.trim() != ''){
 
+        contraseña.classList.remove("alerta")
+
     }else{
-        v1=flase
+        v1=false
 
         contraseña.value = ''
         contraseña.setAttribute("placeholder","contraseña no valida")
@@ -56,8 +71,10 @@ function verificacion(){
 
     if (confirmacion.value == contraseña.value && confirmacion.value != ''){
 
+        confirmacion.classList.remove("alerta")
+
     }else{
-        v1=flase
+        v1=false
         
         confirmacion.value = ''
         confirmacion.setAttribute("placeholder","la contraseña no es la misma")
@@ -66,49 +83,87 @@ function verificacion(){
 
     if(v1){
 
+        alert("usuario registrado")
+        
         datos.push({
-            nombre:nombre,
-            email:email,
-            numero:numero,
-            contraseña:contraseña,
-            confirmacion:confirmacion
+            nombre:nombre.value,
+            email:email.value,
+            numero:numero.value,
+            contraseña:contraseña.value,
+            confirmacion:confirmacion.value
         })
 
+
+        localStorage.setItem('datos', JSON.stringify(datos))
+
+        nombre.value=""
+        numero.value=""
+        email.value=""
+        contraseña.value=""
+        confirmacion.value=""
+
     }
+    return true
 }
 
 function iniciar_secion(){
     let v2 = true
+    datos = JSON.parse(localStorage.getItem('datos'));
+
+    
     datos.forEach(dato => {
         
-        if(dato[0] == usuario){
+        if(dato.nombre == usuario.value){
 
+            usuario.classList.remove("alerta")
 
+            if (dato.contraseña == contra.value){
 
-            if (dato[3] == contra){
-
-
+                perfil = dato
+                localStorage.setItem('perfilUsuario', JSON.stringify(perfil));
+                
+                
+                window.location.href = "usuario.html"
 
             }else{
-                v2=false
+                alert("contrasela incorrecta")
+                contra.setAttribute("class", "alerta")
             }
 
         }else{
             v2 = false
         }
+        if(!v2){
+            usuario.value =""
+            alert("usuario no encontrado")
+            usuario.setAttribute("class", "alerta")
+        }
         
     });
-
-    if(v2){
-
-
-
-    }
 
 }
 
 
-registro.addEventListener("click", verificacion)
-inicio.addEventListener("click", function () {
-    window.location.href = "inicio.html";
+if(registro) registro.addEventListener("click", verificacion)
+if(inicio) inicio.addEventListener("click", function () {
+    window.location.href = "inicio.html"
 })
+if(inicio_s) inicio_s.addEventListener("click", iniciar_secion)
+if (lista){
+    const perfil = JSON.parse(localStorage.getItem('perfilUsuario'));
+
+    lista.innerHTML = `
+        <li>
+            <label>nombre</label>
+            <h1>${perfil.nombre}</h1>
+        </li>
+        <li>
+            <label>numero</label>
+            <h1>${perfil.numero}</h1>
+        </li>
+        <li>
+            <label>email</label>
+            <h1>${perfil.email}</h1>
+        </li>
+    `
+}
