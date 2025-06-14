@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/proyecto_tareas/styles.css">
+</head>
+<body class="tareas">
+    
+    <div class="header">
+        <input type="text" id="tarea" placeholder="ingrese su tarea" autocomplete="off">
+        <div class="fecha">
+            
+            <select name="" id="dia">
+                <option value=""></option>
+                <option value="lunes">lunes</option>
+                <option value="martes">martes</option>
+                <option value="miercoles">miercoles</option>
+                <option value="jueves">jueves</option>
+                <option value="viernes">viernes</option>
+                <option value="sabado">sabado</option>
+                <option value="domingo">domingo</option>
+            </select>
+            <input type="time" name="" id="hora">
+        </div>
+        <button class="btn" id="btn_tarea">Guardar</button>
+    </div>
+    <div class="contenedor">
+        <h3>lista de tareas</h3>
+        <ul id="lista">
+
+        </ul>
+    </div>
+
+    <script src="/proyecto_tareas/js/main.js"></script>
+</body>
+</html>

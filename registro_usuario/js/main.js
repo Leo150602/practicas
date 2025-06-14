@@ -127,7 +127,7 @@ function iniciar_secion(){
 
                 perfil = dato
                 localStorage.setItem('perfil', JSON.stringify(perfil.nombre))
-                window.location.href = "../paginas/usuario.html"
+                window.location.href = "/registro_usuario/paginas/usuario.html"
 
             }else{
                 alert("contrasela incorrecta")
@@ -237,9 +237,9 @@ function aceptar_cambio() {
 
 if(registro) registro.addEventListener("click", verificacion)
 if(inicio) inicio.addEventListener("click", function () {
-    window.location.href = "../paginas/inicio.html"
+    window.location.href = "/registro_usuario/paginas/inicio.html"
 })
-if(registro_p) registro_p.addEventListener("click", function (){window.location.href = "../index.html"})
+if(registro_p) registro_p.addEventListener("click", function (){window.location.href = "/registro_usuario/index.html"})
 if(inicio_s) inicio_s.addEventListener("click", iniciar_secion)
 if (lista) usuario_p()
 
