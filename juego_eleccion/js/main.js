@@ -3,16 +3,25 @@ btn_cambio = document.getElementById("btn_cambio")
 const num = 0
 const resultado = document.getElementById("resultado")
 
-const cambiar_posicion =(uno, dos)=>{
+const transicion =(hijos, inicio_x, inicio_y, posicion_final)=>{
     
-    const posicion = uno.getBoundingClientRect()
-    const posicion_2 = dos.getBoundingClientRect()
-    const ladox =posicion_2.left - posicion.left
-    const ladoy = posicion_2.top - posicion.top
-    uno.style.transform = `translate(${ladox}px, ${ladoy}px)`
-    dos.style.transform = `translate(${-ladox}px, ${-ladoy}px)`
+    for(let i = 0; i<6; i++){
+
+        const valor = posicion_final.indexOf(i)
+        const ladox = inicio_x[valor]
+        const ladoy = inicio_y[valor]
+
+        const tras_x = ladox - inicio_x[i]
+        const tras_y = ladoy - inicio_y[i]
+
+        hijos[i].style.transicion = "all 2s ease"
+        hijos[1].style.transform = `translate(${tras_y}px, ${tras_x}px)`
+        
+
+    }    
     
 }
+
 
 for (let i=0;i<6;i++){
 
@@ -31,52 +40,45 @@ const rojo = document.getElementById("cuadrado_1")
 rojo.setAttribute("style","background-color:red;")
 
 if (btn_cambio) btn_cambio.addEventListener("click",function(){
+
+    let posiciones_iniciales_x = []
+    let posiciones_iniciales_y = []
+    let nuevas_posiciones = []
+    const disponibles = [0,1,2,3,4,5]
     const hijos = Array.from(contenedor_1.children)
-    rojo.setAttribute("style", "")
-    resultado.innerHTML =""
-    const hs = []
-    let contador = 0
-    
-    
-    for (let i = hijos.length -1; i>0;i--){
-        let v4 = true
-        let j
-        while(v4){
+    hijos.forEach(hijo => {
+        let cons = hijo.getBoundingClientRect()
+        posiciones_iniciales_x.push(cons.left)
+        posiciones_iniciales_y.push(cons.top)
+        
+    });
+    let i = 0
+    while(disponibles.length>0){
+        const valor = Math.floor(Math.random()*disponibles.length);
+        const j = disponibles[valor]
+        if(i!=j){
 
-            v4 = false
-           const k = Math.floor(Math.random() * (i + 1))
-            for (let u = 0; u < 6 ; u++){
+            nuevas_posiciones.push(j)
+            i++
+            disponibles.splice(valor,1)
+        }else if(disponibles.length == 1){
 
-                if(k == hs[u]){
-
-                    v4 = true
-
-                }
-
-            }
-            j = k
-
+            nuevas_posiciones.push(j)
+            i++
+            disponibles.splice(valor,1)
         }
         
-        console.log(j)
-        hs.push(j)
-        console.log(hs)
-
         
-        
-
     }
-    for (let i = hijos.length -1; i>0;i--){
-        
-        [hijos[i],hijos[hs[contador]]] = [hijos[hs[contador]],hijos[i]]
-        contador++
-    }
-    hijos.forEach(hijo => {
-        contenedor_1.appendChild(hijo)
-    });
+    [hijos[0],hijos[1],hijos[2],hijos[3],hijos[4],hijos[5]] = [hijos[nuevas_posiciones[0]],hijos[nuevas_posiciones[1]],hijos[nuevas_posiciones[2]],hijos[nuevas_posiciones[3]],hijos[nuevas_posiciones[4]],hijos[nuevas_posiciones[5]]]
+    
+    transicion(hijos,posiciones_iniciales_x,posiciones_iniciales_y,nuevas_posiciones)
+    console.log(nuevas_posiciones)
+    
+   
 
 })
-if(btn_cambio) rojo.addEventListener("click", function(){console.log("este es")
+if(btn_cambio) rojo.addEventListener("click", function(){
     rojo.setAttribute("style","background-color:red;")
     resultado.innerHTML ="<h1>ganaste</h1>"
 })
