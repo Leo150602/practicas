@@ -9,13 +9,14 @@ body{
 
 #contenedor_1{
     height: auto;
-    height: 500px;
+    height: 700px;
     width: 700px;
     display: flex;
     flex-wrap: wrap;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    position: relative;
 }
 
 .movimiento{
@@ -32,7 +33,7 @@ body{
     font-size: 30px;
     position: relative;
     border: 2px solid black;
-    transition: all 2s ease;
+    transition: all 0.8s ease;
     
 }
 
