@@ -1,32 +1,39 @@
 const jugador = document.getElementById("mario")
 let activo = false
+const cuerpo = document.getElementById("cuerpo")
+let teclas = [], speed =5
 
-document.addEventListener("keydown", (tecla)=>{
+jugador.style.top = cuerpo.getBoundingClientRect().bottom-100+"px"
 
-    activo=true
-    let rect = jugador.getBoundingClientRect()
-    posx = rect.left
-    posy = rect.top
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-    
-        if (tecla.key == "ArrowLeft"){
-            jugador.style.left = (posx-2)+"px"
-            console.log(posy)
-        }
-        if (tecla.key == "ArrowRight"){
-            jugador.style.left = (posx+2)+"px"
-            console.log(posx)
-        }
-        if (tecla.key == "ArrowUp"){
-            jugador.style.tpo = (posy-2)+"px"
-        }
-        if (tecla.key == "ArrowDown"){
-            jugador.style.top= (posx+2)+"px"
-        }
-        setTimeout(10)
+document.addEventListener("keydown", async (tecla)=>{
+
+    teclas[tecla.key]=true
     
 })
 document.addEventListener("keyup", (tecla)=>{
 
-    activo=false
+    teclas[tecla.key]=false
 })
+
+const mover = () =>{
+
+    const boxStyle = jugador.style;
+    let top = parseInt(boxStyle.top);
+    let left = parseInt(boxStyle.left);
+    
+    if (teclas['ArrowUp']){
+        jugador.style.top = top-100+"px"
+    }
+    if (teclas['ArrowDown']) jugador.style.top = top+100+"px"
+    if (teclas['ArrowLeft']) jugador.style.left = left-=speed+"px"
+    if (teclas['ArrowRight']) jugador.style.left = left+=speed+"px"
+    
+    requestAnimationFrame(mover)
+
+}
+
+mover()
