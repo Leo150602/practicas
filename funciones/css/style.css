@@ -81,9 +81,11 @@ flex-direction: column;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    z-index: 1;
+    p{
+        height: 100%;
+    }
 
-}
-#cosa{
-    position: absolute;
 }
 

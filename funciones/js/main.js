@@ -3,11 +3,7 @@ const texto = document.getElementById("texto")
 const btn_crear = document.getElementById("btn_crear")
 const div = document.getElementById("parte_2")
 const cuadrados = document.getElementsByClassName("cuadrado")
-let posx, posy, activo = null
-let offsetX = 0;
-let offsetY = 0;
-
-const cosa = document.getElementById("cosa")
+let posx, posy, activo = null, posxPasada, posyPasada,contadorZ=0, elemento = null
 
 const crear = () =>{
 
@@ -22,38 +18,61 @@ const crear = () =>{
     nuevo_div.style.left = Math.floor(Math.random() * (ancho - 100 + 1)) + "px"
     nuevo_div.style.top = Math.floor(Math.random() * (largo - 100 + 1)) + "px"
 
+    nuevo_div.style.zIndex = ++contadorZ
+
+    nuevo_div.addEventListener("mousedown", mover)
     div.appendChild(nuevo_div)
 
 }
 
 const mover = (e) =>{
 
-    activo = e.target
-
-    offsetX = e.clientX - cosa.offsetLeft;
-    offsetY = e.clientY - cosa.offsetTop;
-    div.style.cursor = 'grabbing';
+    elemento = e.target
+    activo = true
+    posx = e.clientX
+    posy = e.clientY
+    posxPasada = e.clientX
+    posyPasada = e.clientY
+    elemento.style.cursor = 'grabbing';
+    elemento.style.zIndex = ++contadorZ
 
 }
 
-cosa.addEventListener("mousedown", mover)
-cosa.addEventListener("mousemove", function(e){
+
+div.addEventListener("mousemove", function(e){
     
-    if(!activo) return 
+    if(!activo || !elemento) return 
 
-    const rect = cosa.getBoundingClientRect()
+    let rect = div.getBoundingClientRect()
+    bordeX = rect.left
+    bordeY = rect.top
+    limiteDerecho = rect.right
+    limiteInferior = rect.bottom
 
-    posx = e.clientX - rect.left - offsetX
-    posy = e.clientY - rect.top - offsetY
+    let rect2 = elemento.getBoundingClientRect()
+    cajaX = rect2.left
+    cajaY = rect2.top
+    cajaInferior = rect2.bottom
+    cajaDerecho = rect2.right
 
-    cosa.style.left = posx +"px"
-    cosa.style.top =  posy +"px"
-    console.log(posx,posy)
+    let cambioX = posx-bordeX-(posx-cajaX)+(posx-posxPasada)
+    let cambioY = posy-bordeY-(posy-cajaY)+(posy-posyPasada)
+
+    if(cambioX > 0 && cambioX < (limiteDerecho-bordeX)-(cajaDerecho-cajaX)) elemento.style.left = cambioX+"px"
+    if(cambioY > 0 && cambioY < (limiteInferior-bordeY)-(cajaInferior-cajaY)) elemento.style.top = cambioY+"px"
+
+    posxPasada = posx
+    posyPasada = posy
+
+    posx = e.clientX
+    posy = e.clientY  
 
 })
-document.addEventListener("mouseup", function(){
+document.addEventListener("mouseup", function(e){
     activo = false
     div.style.cursor = 'grab'
+    if(elemento) elemento.style.cursor = 'grab'
+    
 })
 
 btn_crear.addEventListener("click", crear)
